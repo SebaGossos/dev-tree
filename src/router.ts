@@ -3,7 +3,9 @@ import { Router } from "express";
 const router = Router();
 
 // Autentication and registration routes
-router.get('/auth/register', (req, res) => {
+router.post('/auth/register', (req, res) => {
+  const { body } = req;
+  console.log(body);
   res.send('Register page');
 })
 
