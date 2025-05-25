@@ -1,5 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
+// this is the interface for the user model
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
 // this is the user schema
 const userSchema = new Schema({
   name: {
@@ -20,5 +26,5 @@ const userSchema = new Schema({
   },
 })
 
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model<IUser>("User", userSchema)
 export default User
