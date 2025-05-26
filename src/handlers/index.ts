@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
 import slugify from "slugify";
 
 import User from "../models/User";
@@ -7,10 +8,17 @@ import { hashPassword } from "../utils/auth";
 
 // this is the handler for the create account route
 export const createAccountHandler = async (req: Request, res: Response) => {
+  
+  //! ERROR HANDLING EXIST
+  let errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    res.status(400).json({errors: errors.array()})
+    return;
+  }
+  
   const { email, password } = req.body;
   const handle = slugify(req.body.handle, '');
 
-  //! ERROR HANDLING EXIST
   const userExists = await User.findOne({ email });
   const handleExists = await User.findOne({ handle });
   if (userExists || handleExists) {
