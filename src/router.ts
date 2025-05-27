@@ -2,7 +2,7 @@ import { Router } from "express";
 
 
 import { createAccountHandler, logingHandler } from "./handlers";
-import validate from "./middleware/errorHandling";
+import validate from "./middleware/validation";
 import { loginValidations, registerValidations } from "./validations";
 
 const router = Router();
