@@ -1,6 +1,17 @@
-.env
-node_modules/
-package-lock.json
-dist/
-.vscode/
+
+# Ignorar archivos de entorno (en backend o frontend)
+**/.env
+
+# Node modules (en cualquier subcarpeta)
+**/node_modules/
+
+# Archivos compilados o de build (dist para backend, build para frontend)
+**/dist/
+**/build/
+
+# Configs locales del editor
+**/.vscode/
+
+# Archivos del sistema
 .DS_Store
+Thumbs.db
