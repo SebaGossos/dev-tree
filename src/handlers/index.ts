@@ -1,26 +1,18 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import slugify from "slugify";
 
 import User from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { comparePassword, hashPassword } from "../utils/auth";
 
 // this is the handler for the create account route
 export const createAccountHandler = async (req: Request, res: Response) => {
-  //! ERROR HANDLING EXIST
-  let errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return;
-  }
-
   const { email, password } = req.body;
   const handle = slugify(req.body.handle, "");
 
+  //! HANDLE ERRORS
   const userExists = await User.findOne({ email });
   const handleExists = await User.findOne({ handle });
   if (userExists || handleExists) {
-    // handle the error
     const msgError = userExists ? "User email already exists" : "Handle already exists";
     const error = new Error(msgError).message;
     res.status(409).send({ error });
@@ -51,11 +43,20 @@ export const createAccountHandler = async (req: Request, res: Response) => {
 
 // this is the handler for the login route
 export const logingHandler = async (req: Request, res: Response) => {
-  // //! ERROR HANDLING EXIST
-  // let errors = validationResult(req);
-  // console.log(33)
-  // if (!errors.isEmpty()) {
-  //   res.status(400).json({ errors: errors.array() });
-  //   return;
-  // }
+  const { email, password } = req.body;
+
+  //! HANDLE ERRORS
+  const checkUserEmail = await User.findOne({ email });
+  if (!checkUserEmail) {
+    res.status(404).send({ error: new Error("Invalid email").message });
+    return;
+  }
+  const checkUserPassword = await comparePassword(password, checkUserEmail?.password);
+  if (!checkUserPassword) {
+    res.status(401).send({ error: new Error("Invalid password").message });
+    return;
+  }
+
+  //? If the user exists and the password is correct, send a success response
+  res.send("Login successful");
 };
