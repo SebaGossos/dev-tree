@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 export default function RegisterView() {
   return (
     <>
-      <div>RegisterView</div>
+      <h1 className="text-4xl text-white font-bold">Crear Cuenta</h1>
 
-      <nav>
-
-        <Link to="/auth/login">¿Ya tienes cuentasssss? Inicia Session aquí</Link>
+      <nav className="mt-10">
+        <Link className="text-center text-white text-lg block" to="/auth/login">
+          ¿Ya tienes cuentasssss? Inicia Session aquí
+        </Link>
       </nav>
     </>
-  )
+  );
 }
