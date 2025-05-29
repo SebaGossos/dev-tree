@@ -17,7 +17,7 @@ export default function RegisterView() {
     formState: { errors },
   } = useForm({ defaultValues: initialValues });
 
-  console.log(errors);
+  const password = watch('password')
 
   const handleRegister = () => {
     console.log("Desde handle Register");
@@ -41,7 +41,19 @@ export default function RegisterView() {
             E-mail
           </label>
 
-          <input id="email" type="email" placeholder="Email de Registro" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("email", { required: "El Email es obligatorio" })} />
+          <input
+            id="email"
+            type="email"
+            placeholder="Email de Registro"
+            className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
+            {...register("email", {
+              required: "El Email es obligatorio",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "E-mail no válido",
+              },
+            })}
+          />
 
           {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </div>
@@ -59,7 +71,7 @@ export default function RegisterView() {
             Password
           </label>
 
-          <input id="password" type="password" placeholder="Password de Registro" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password", { required: "El Password es obligatorio" })} />
+          <input id="password" type="password" placeholder="Password de Registro" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password", { required: "El Password es obligatorio", minLength: {value: 8, message: 'Debe ser minimo de 8 caracteres'} })} />
 
           {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
         </div>
@@ -68,7 +80,7 @@ export default function RegisterView() {
             Repetir Password
           </label>
 
-          <input id="password_confirmation" type="password" placeholder="Repetir Password" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password_confirmation", { required: "Los Password deben coincidir" })} />
+          <input id="password_confirmation" type="password" placeholder="Repetir Password" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password_confirmation", { required: "Los Password deben coincidir", validate: (value) => value === password || 'Los password no son iguales' })} />
 
           {errors.password_confirmation && <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage>}
         </div>
