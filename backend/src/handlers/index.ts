@@ -38,7 +38,7 @@ export const createAccountHandler = async (req: Request, res: Response) => {
     return;
   }
   // send a response to the client
-  res.status(201).send("REgistro creado correctamente");
+  res.status(201).send("Registro creado correctamente");
 };
 
 // this is the handler for the login route
