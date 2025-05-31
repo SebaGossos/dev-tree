@@ -17,17 +17,21 @@ export default function RegisterView() {
     register,
     watch,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserForm>({ defaultValues: initialValues });
 
-  const password = watch('password')
+  const password = watch("password");
+
+  const { VITE_API_URL } = import.meta.env;
 
   const handleRegister = async (formData: UserForm) => {
     try {
-      const { data } = await axios.post('http://localhost:4000/auth/register', formData)
-      console.log(data)
+      const { data } = await axios.post(`${VITE_API_URL}/auth/register`, formData);
+      console.log(data);
+      reset()
     } catch (error) {
-      if(isAxiosError(error)) console.log(error.response?.data?.error)
+      if (isAxiosError(error)) console.log(error.response?.data?.error);
     }
   };
 
@@ -79,7 +83,7 @@ export default function RegisterView() {
             Password
           </label>
 
-          <input id="password" type="password" placeholder="Password de Registro" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password", { required: "El Password es obligatorio", minLength: {value: 8, message: 'Debe ser minimo de 8 caracteres'} })} />
+          <input id="password" type="password" placeholder="Password de Registro" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password", { required: "El Password es obligatorio", minLength: { value: 8, message: "Debe ser minimo de 8 caracteres" } })} />
 
           {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
         </div>
@@ -88,7 +92,13 @@ export default function RegisterView() {
             Repetir Password
           </label>
 
-          <input id="password_confirmation" type="password" placeholder="Repetir Password" className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400" {...register("password_confirmation", { required: "Los Password deben coincidir", validate: (value) => value === password || 'Los password no son iguales' })} />
+          <input
+            id="password_confirmation"
+            type="password"
+            placeholder="Repetir Password"
+            className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
+            {...register("password_confirmation", { required: "Los Password deben coincidir", validate: (value) => value === password || "Los password no son iguales" })}
+          />
 
           {errors.password_confirmation && <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage>}
         </div>
