@@ -3,6 +3,7 @@ import slugify from "slugify";
 
 import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
+import { generateJWT } from "../utils/jwt";
 
 // this is the handler for the create account route
 export const createAccountHandler = async (req: Request, res: Response) => {
@@ -46,17 +47,17 @@ export const logingHandler = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   //! HANDLE ERRORS
-  const checkUserEmail = await User.findOne({ email });
-  if (!checkUserEmail) {
+  const user = await User.findOne({ email });
+  if (!user) {
     res.status(404).send({ error: new Error("Invalid email").message });
     return;
   }
-  const checkUserPassword = await comparePassword(password, checkUserEmail?.password);
+  const checkUserPassword = await comparePassword(password, user?.password);
   if (!checkUserPassword) {
     res.status(401).send({ error: new Error("Invalid password").message });
     return;
   }
-
+  generateJWT(user)
   //? If the user exists and the password is correct, send a success response
   res.send("Login successful");
 };
