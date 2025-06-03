@@ -57,7 +57,8 @@ export const logingHandler = async (req: Request, res: Response) => {
     res.status(401).send({ error: new Error("Invalid password").message });
     return;
   }
-  generateJWT(user)
-  //? If the user exists and the password is correct, send a success response
-  res.send("Login successful");
+  //? If the user exists and the password is correct, create token and send a success response
+
+  const token = generateJWT({id: user.toObject()._id})
+  res.send(token);
 };
