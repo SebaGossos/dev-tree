@@ -13,6 +13,6 @@ const router = Router();
 // Autentication and registration routes
 router.post('/auth/register', validate(registerValidations), createAccountHandler);
 router.post('/auth/login', validate(loginValidations), logingHandler);
-router.get('/user', getUser)
+router.get('/user', getUser); 
 
 export default router;
