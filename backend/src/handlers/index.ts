@@ -48,6 +48,7 @@ export const logingHandler = async (req: Request, res: Response) => {
 
   //! HANDLE ERRORS
   const user = await User.findOne({ email });
+  console.log(email, password, user)
   if (!user) {
     res.status(404).send({ error: new Error("Invalid email").message });
     return;
@@ -62,3 +63,12 @@ export const logingHandler = async (req: Request, res: Response) => {
   const token = generateJWT({id: user.toObject()._id})
   res.send(token);
 };
+
+export const getUser = async ( req: Request, res: Response ) => {
+  const bearer = req.headers.authorization
+
+  if(!bearer) {
+    const error = new Error('No Autorizado')
+    res.status(401).json({error: error.message})
+  }
+}
