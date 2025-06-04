@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
-import jwt from "jsonwebtoken";
+
 
 import User from '../models/User';
 import { comparePassword, hashPassword } from "../utils/auth";
@@ -66,31 +66,5 @@ export const logingHandler = async (req: Request, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
-  //! HANDLE ERROR
-  const bearer = req.headers.authorization;
-  const token = bearer?.split(" ")[1];
-
-  if (!bearer || !token) {
-    const error = new Error("No Autorizado");
-    res.status(401).json({ error: error.message });
-    return;
-  }
-
-  try {
-    const result = jwt.verify(token, process.env.JWT_SECRET);
-    let user;
-    if (typeof result === "object" && result.id) user = await User.findById(result.id).select('-password');
-    if (!user) {
-      const error = new Error("El usuario no existe");
-      res.status(404).json({ error: error.message });
-      return;
-    }
-    //? RESPONSE
-    res.json(user)
-    
-  } catch (error) {
-    res.status(500).json({ error: "Token no valido" });
-  }
-
-
+  res.json(req.user)
 };
