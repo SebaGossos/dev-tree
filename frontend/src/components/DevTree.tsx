@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 import NavigationTabs from "./NavigationTabs"
 import type { User } from "../types";
 
-type DevTreeProps {
+type DevTreeProps = {
   data: User
 }
 function DevTree({data} : DevTreeProps) {
