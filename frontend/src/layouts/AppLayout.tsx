@@ -17,7 +17,7 @@ export default function AppLayout() {
   console.log(data)
   console.log(isLoading)
   console.log(isError)
-  console.log(error)
+  console.log(error?.message)
   
   return (
     <>

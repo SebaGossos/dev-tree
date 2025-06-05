@@ -18,7 +18,7 @@ app.use(cors(corsConfig))
 
 //? Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //sirve para recibir datos de tipo application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })); //* sirve para recibir datos de tipo application/x-www-form-urlencoded
 
 //? Routing
 app.use("/", router);
