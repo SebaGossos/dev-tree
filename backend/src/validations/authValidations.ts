@@ -17,5 +17,5 @@ export const loginValidations = [
 // Validaciones para Update profile
 export const UpdateProfileValidations = [
   body("handle").notEmpty().withMessage("handle field is required"),
-  body("descritpion").notEmpty().withMessage("Description field is required"),
+  body("description").notEmpty().withMessage("Description field is required"),
 ];

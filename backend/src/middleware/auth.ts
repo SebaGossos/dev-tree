@@ -31,8 +31,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         res.status(404).json({ error: error.message });
         return;
       }
-      req.user = user;
       //? RESPONSE
+      req.user = user;
       next();
     }
   } catch (error) {

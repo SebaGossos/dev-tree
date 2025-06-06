@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
 
-
-import User from '../models/User';
+import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateJWT } from "../utils/jwt";
 
@@ -65,14 +64,30 @@ export const logingHandler = async (req: Request, res: Response) => {
   res.send(token);
 };
 
-export const getUser = async (req: Request, res: Response) => void res.json(req.user)
+export const getUser = async (req: Request, res: Response) => void res.json(req.user);
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    console.log(req.body)
+    const { description } = req.body;
+    
+    //! HANDLE ERRORS
+    const handle = slugify(req.body.handle, "");
+    const handleExists = await User.findOne({ handle });
+    if (handleExists && handleExists.email !== req.body.email) {
+      const msgError = "Handle already exists";
+      const error = new Error(msgError).message;
+      res.status(409).send({ error });
+      return;
+    }
+
+    req.user.description = description;
+    req.user.handle = handle;
+    await req.user.save()
+    res.send('Perfil Actualizado correctamente')
+    
   } catch (e) {
-    const error = new Error('Hubo un error')
-    res.status(500).json({error: error.message})
-    return
+    const error = new Error("Hubo un error");
+    res.status(500).json({ error: error.message });
+    return;
   }
 };
