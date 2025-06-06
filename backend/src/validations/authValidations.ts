@@ -13,3 +13,9 @@ export const loginValidations = [
   body("password").notEmpty().withMessage("Password field is required"), 
   body("email").isEmail().withMessage("Email field is required")
 ];
+
+// Validaciones para Update profile
+export const UpdateProfileValidations = [
+  body("handle").notEmpty().withMessage("handle field is required"),
+  body("descritpion").notEmpty().withMessage("Description field is required"),
+];
