@@ -4,21 +4,26 @@ import { useQueryClient } from "@tanstack/react-query";
 
 // * Internals imports
 import ErrorMessage from "../components/ErrorMessage";
-import { getUser } from "../api/DevTreeAPI";
-import type { User } from "../types";
+import type { ProfileForm, User } from "../types";
+import { ProfileForm } from '../types/index';
 
 export default function ProfileView() {
-  const queryClient = useQueryClient()
-  const data: User = queryClient.getQueryData(['user'])!
-  console.log( data )
+  const queryClient = useQueryClient();
+  const data: User = queryClient.getQueryData(["user"])!;
+  console.log(data);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { handle: data?.handle, description: data?.description } });
+  } = useForm<ProfileForm>({
+    defaultValues: {
+      handle: data?.handle,
+      description: data?.description,
+    },
+  });
 
-  const handleUserProfileForm = (formData) => {
+  const handleUserProfileForm = (formData: ProfileForm) => {
     console.log("desde handleUserProfileForm", formData);
   };
 
