@@ -1,16 +1,15 @@
 // * Externals imports
 import { useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 // * Internals imports
 import ErrorMessage from "../components/ErrorMessage";
 import type { ProfileForm, User } from "../types";
-import { ProfileForm } from '../types/index';
+import { updateProfileFront } from "../api/DevTreeAPI";
 
 export default function ProfileView() {
   const queryClient = useQueryClient();
   const data: User = queryClient.getQueryData(["user"])!;
-  console.log(data);
 
   const {
     register,
@@ -23,8 +22,18 @@ export default function ProfileView() {
     },
   });
 
+  const updateProfileMutation = useMutation({
+    mutationFn: updateProfileFront,
+    onError: () => {
+      console.log('hubo un error')
+    },
+    onSuccess: () => {
+      console.log('todo ok')
+    }
+  })
+  
   const handleUserProfileForm = (formData: ProfileForm) => {
-    console.log("desde handleUserProfileForm", formData);
+    updateProfileMutation.mutate(formData)
   };
 
   return (
