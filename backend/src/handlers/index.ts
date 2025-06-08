@@ -1,9 +1,13 @@
+//* externals imports
 import { Request, Response } from "express";
 import slugify from "slugify";
+import formidable from "formidable";
 
+//* internals imports
 import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateJWT } from "../utils/jwt";
+import cloudinary from "../config/cloudinary";
 
 // this is the handler for the create account route
 export const createAccountHandler = async (req: Request, res: Response) => {
@@ -27,7 +31,6 @@ export const createAccountHandler = async (req: Request, res: Response) => {
   user.password = hashedPassword;
 
   // create a slug for the user
-  console.log(handle);
   user.handle = handle;
 
   // save the user to the database
@@ -48,7 +51,6 @@ export const logingHandler = async (req: Request, res: Response) => {
 
   //! HANDLE ERRORS
   const user = await User.findOne({ email });
-  console.log(email, password, user);
   if (!user) {
     res.status(404).send({ error: new Error("Invalid email").message });
     return;
@@ -69,11 +71,11 @@ export const getUser = async (req: Request, res: Response) => void res.json(req.
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const { description } = req.body;
-    
+
     const handle = slugify(req.body.handle, "");
     const handleExists = await User.findOne({ handle });
-    
-    //! HANDLE ERRORS 
+
+    //! HANDLE ERRORS
     if (handleExists && handleExists.email !== req.user.email) {
       const msgError = "Nombre de Usuario no disponible";
       const error = new Error(msgError).message;
@@ -83,11 +85,24 @@ export const updateProfile = async (req: Request, res: Response) => {
 
     req.user.description = description;
     req.user.handle = handle;
-    await req.user.save()
-    res.send('Perfil Actualizado correctamente')
+    await req.user.save();
+    res.send("Perfil Actualizado correctamente");
+  } catch (e) {
+    const error = new Error("Hubo un error");
+    res.status(500).json({ error: error.message });
+    return;
+  }
+};
+
+export const uploadImage = async (req: Request, res: Response) => {
+  const form = formidable({ multiples: false });
+  form.parse(req, (error, field, files) => {
+    console.log(files.file[0].filepath)
+  });
+
+  try {
     
   } catch (e) {
-    console.log(e)
     const error = new Error("Hubo un error");
     res.status(500).json({ error: error.message });
     return;
