@@ -6,6 +6,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import ErrorMessage from "../components/ErrorMessage";
 import type { ProfileForm, User } from "../types";
 import { updateProfileFront } from "../api/DevTreeAPI";
+import { toast } from "sonner";
 
 export default function ProfileView() {
   const queryClient = useQueryClient();
@@ -24,11 +25,12 @@ export default function ProfileView() {
 
   const updateProfileMutation = useMutation({
     mutationFn: updateProfileFront,
-    onError: () => {
-      console.log('hubo un error')
+    onError: (error) => {
+      toast.error(error.message)
     },
-    onSuccess: () => {
-      console.log('todo ok')
+    onSuccess: (data) => {
+      toast.success(data)
+      queryClient.invalidateQueries({queryKey: ['user']})
     }
   })
   

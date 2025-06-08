@@ -16,10 +16,10 @@ export async function getUser() {
 export async function updateProfileFront(formData: ProfileForm) {
 
   try {
-    const { data } = await apiAxios.patch<String>('/user', formData)
+    const { data } = await apiAxios.patch<string>('/user', formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
+    if (isAxiosError(error) && error.response) { 
       throw new Error(error.response.data.error) 
     }
   }

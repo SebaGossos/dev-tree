@@ -70,11 +70,12 @@ export const updateProfile = async (req: Request, res: Response) => {
   try {
     const { description } = req.body;
     
-    //! HANDLE ERRORS
     const handle = slugify(req.body.handle, "");
     const handleExists = await User.findOne({ handle });
-    if (handleExists && handleExists.email !== req.body.email) {
-      const msgError = "Handle already exists";
+    
+    //! HANDLE ERRORS 
+    if (handleExists && handleExists.email !== req.user.email) {
+      const msgError = "Nombre de Usuario no disponible";
       const error = new Error(msgError).message;
       res.status(409).send({ error });
       return;
@@ -86,6 +87,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     res.send('Perfil Actualizado correctamente')
     
   } catch (e) {
+    console.log(e)
     const error = new Error("Hubo un error");
     res.status(500).json({ error: error.message });
     return;
