@@ -34,6 +34,14 @@ export default function ProfileView() {
     }
   })
   
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if( e.target.files ){
+      console.log(e.target.files[0])
+    }
+  }
+  
+  
   const handleUserProfileForm = (formData: ProfileForm) => {
     updateProfileMutation.mutate(formData)
   };
@@ -55,7 +63,7 @@ export default function ProfileView() {
 
       <div className="grid grid-cols-1 gap-2">
         <label htmlFor="handle">Imagen:</label>
-        <input id="image" type="file" name="handle" className="border-none bg-slate-100 rounded-lg p-2" accept="image/*" onChange={() => {}} />
+        <input id="image" type="file" name="handle" className="border-none bg-slate-100 rounded-lg p-2" accept="image/*" onChange={handleChange} />
       </div>
 
       <input type="submit" className="bg-cyan-400 p-2 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer" value="Guardar Cambios" />
