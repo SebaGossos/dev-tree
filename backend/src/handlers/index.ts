@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import slugify from "slugify";
 import formidable from "formidable";
+import {v4 as uuid} from 'uuid'
 
 //* internals imports
 import User from "../models/User";
@@ -96,11 +97,20 @@ export const updateProfile = async (req: Request, res: Response) => {
 
 export const uploadImage = async (req: Request, res: Response) => {
   const form = formidable({ multiples: false });
-  form.parse(req, (error, field, files) => {
-    console.log(files.file[0].filepath)
-  });
-
+  
   try {
+    form.parse(req, (error, field, files) => {
+      cloudinary.uploader.upload(files.file[0].filepath, {public_id: uuid() }, async function(error, result) {
+        if(error) {
+          const error = new Error('Hubo un error al subir la imagen')
+          res.status(500).json({error: error.message})
+          return
+        }
+        if(result) {
+          console.log(result.secure_url)
+        }
+      })
+    });
     
   } catch (e) {
     const error = new Error("Hubo un error");
