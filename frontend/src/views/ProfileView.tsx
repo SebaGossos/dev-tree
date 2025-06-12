@@ -5,7 +5,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 // * Internals imports
 import ErrorMessage from "../components/ErrorMessage";
 import type { ProfileForm, User } from "../types";
-import { updateProfileFront } from "../api/DevTreeAPI";
+import { updateProfileFront, uploadImage } from "../api/DevTreeAPI";
 import { toast } from "sonner";
 
 export default function ProfileView() {
@@ -35,9 +35,20 @@ export default function ProfileView() {
   })
   
 
+  const uploadImageMutation = useMutation({
+    mutationFn: uploadImage,
+    onError: (error) => {
+      console.log(error)
+    },
+    onSuccess: (data) => {
+      console.log(data)
+    }
+  })
+  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if( e.target.files ){
-      console.log(e.target.files[0])
+      uploadImageMutation.mutate(e.target.files[0])
     }
   }
   
