@@ -14,7 +14,7 @@ export async function getUser() {
   }
 }
 
-export async function updateProfileFront(formData: ProfileForm) {
+export async function updateProfileFront(formData: User) {
 
   try {
     const { data } = await apiAxios.patch<string>('/user', formData);
